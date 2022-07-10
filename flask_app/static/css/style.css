@@ -1,0 +1,30 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: navajowhite;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.container {
+    width: 500px;
+    background-color: white;
+    padding: 20px;
+    margin: 30px;
+    border-radius: 15px;
+}
+
+.input-group {
+    margin-bottom: 10px;
+}
+
+.btn-home {
+    display: flex;
+    justify-content: flex-end;
+}

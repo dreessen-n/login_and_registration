@@ -9,7 +9,8 @@
 body {
     background-color: navajowhite;
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
 }
 
 .container {

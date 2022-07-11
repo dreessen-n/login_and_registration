@@ -25,6 +25,6 @@ flask and MySQL - validation section - login_and_registration assignment
 
 ![dashboard](https://user-images.githubusercontent.com/99504059/178320660-dbcfa088-a6f2-44d0-8a3c-8fc10b8a2087.png)
 
-## Dashboard error is not in session; redirects to registration and login
+## Dashboard error: not in session; redirects to registration and login
 
 ![dashboard_error_expiredSession](https://user-images.githubusercontent.com/99504059/178320793-e914a977-e3b6-440c-bbeb-97027417b8f1.png)

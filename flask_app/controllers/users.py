@@ -3,6 +3,7 @@ from flask_app import app
 # Import modules from flask
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_app import bcrypt
+from flask import flash
 
 # Import models class
 from flask_app.models import user
@@ -35,12 +36,15 @@ def regitster():
     # Check we have a user_id; is yes save into session
     if user_id:
         session['id'] = user_id
-    # Redirect to the welcome page
-    return redirect('/welcome')
+    # Redirect to the dashboard page
+    return redirect('/dashboard')
 
-@app.route('/welcome')
-def welcome():
+@app.route('/dashboard')
+def dashboard():
     """Welcome page"""
+    if 'id' not in session:
+        flash("Please register or login to continue", "danger")
+        return redirect('/')
     # Create data set to query user based on id to get name to display
     data = {
         'id': session['id']
@@ -48,10 +52,11 @@ def welcome():
     # Pass the data dict to create_user method in class
     one_user = user.User.get_user_by_id(data)
     print(one_user.first_name, one_user.last_name)
-    return render_template('welcome.html', one_user=one_user)
+    return render_template('dashboard.html', one_user=one_user)
 
 @app.route('/logout')
 def logout():
     """Logged the user out of seesion and redirect to login"""
     session.clear()
     return redirect('/')
+

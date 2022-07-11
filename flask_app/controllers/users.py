@@ -2,7 +2,7 @@
 from flask_app import app
 # Import modules from flask
 from flask import Flask, render_template, request, redirect, session, url_for
-from flask_bcrypt import Bcrypt
+from flask_app import bcrypt
 
 # Import models class
 from flask_app.models import user
@@ -18,7 +18,7 @@ def index():
 def regitster():
     """Register new user"""
     # Call staticmethod to validate form
-    if not user.User.validate_user(request.form):
+    if not user.User.validate_registration(request.form):
         # Redirect back to registration page
         return redirect('/')
     # Create data dict based on request form
@@ -27,19 +27,31 @@ def regitster():
         'first_name': request.form['first_name'],
         'last_name': request.form['last_name'],
         'email': request.form['email'],
-        'password': request.form['password']
+        'password': bcrypt.generate_password_hash(request.form['password'])
     }
     # Pass the data dict to create_user method in class
-    user.User.create_user(data)
+    # After insert the db returns the user_id; save it
+    user_id = user.User.create_user(data)
+    # Check we have a user_id; is yes save into session
+    if user_id:
+        session['id'] = user_id
     # Redirect to the welcome page
     return redirect('/welcome')
 
 @app.route('/welcome')
 def welcome():
     """Welcome page"""
-    return render_template('Welcome.html')
+    # Create data set to query user based on id to get name to display
+    data = {
+        'id': session['id']
+    }
+    # Pass the data dict to create_user method in class
+    one_user = user.User.get_user_by_id(data)
+    print(one_user.first_name, one_user.last_name)
+    return render_template('welcome.html', one_user=one_user)
 
-# TODO set routes to CREATE - INSERT into db in models
-# TODO set routes to READ - SELECT from db in models
-# TODO set routes to UPDATE - UPDATE from db in models
-# TODO set routes to DELETE - DELETE from db in models
+@app.route('/logout')
+def logout():
+    """Logged the user out of seesion and redirect to login"""
+    session.clear()
+    return redirect('/')

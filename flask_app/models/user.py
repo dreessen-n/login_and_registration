@@ -31,19 +31,15 @@ class User:
         """Add new user to db"""
         query = "INSERT INTO users (first_name, last_name, email, password) VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);"
         return connectToMySQL('login_and_registration').query_db(query,data)
-
     @classmethod
-    def diplay_welcome(cls):
-        """Show the welcome page after registration"""
-        pass
-
-    @classmethod
-    def logout(cls):
-        """Logout the user from session"""
-        pass
+    def get_user_by_id(cls, data):
+        """Get the user by id"""
+        query = "SELECT * FROM users WHERE id = %(id)s;"
+        # Returns list & we make an instance of the first index of that list
+        return cls(connectToMySQL('login_and_registration').query_db(query, data)[0])
 
     @staticmethod
-    def validate_user(user):
+    def validate_registration(user):
             """Validate the add a user form"""
             is_valid = True # We assume this is true
             if len(user['first_name']) < 3:

@@ -67,7 +67,7 @@ class User:
             # Check for if email has already been used and stored in db
             query = "SELECT * FROM users WHERE email = %(email)s;"
             data = {
-                "email": "user['email']"
+                "email": user['email']
             }
             email_result = connectToMySQL('login_and_registration').query_db(query, data)
             # Check to see if the query returned an result with that email;

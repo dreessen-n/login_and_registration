@@ -68,7 +68,7 @@ def login():
         return redirect('/')
     if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
         # If returns False, flash message
-        flash("Invalid password", "danger")
+        flash("The password must be at least 8 characters, and contain at least one each of the following: one upper, one lower, one digit and one special character.", "danger")
         return redirect('/')
     # If password match, we set the user_id into session
     session['id'] = user_in_db.id

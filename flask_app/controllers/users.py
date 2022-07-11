@@ -1,9 +1,8 @@
 # Import app
 from flask_app import app
 # Import modules from flask
-from flask import Flask, render_template, request, redirect, session, url_for
-from flask_app import bcrypt
-from flask import flash
+from flask_app import Flask, render_template, request, redirect, session, url_for, flash, bcrypt
+# from flask_bcrypt import Bcrypt
 
 # Import models class
 from flask_app.models import user
@@ -56,6 +55,25 @@ def dashboard():
         session['first_name'] = one_user.first_name
         session['last_name'] = one_user.last_name
     return render_template('dashboard.html', one_user=one_user)
+
+@app.route('/login', methods=['POST'])
+def login():
+    """Login in the user"""
+    # See if the username/email provide is in db
+    data = { 'email': request.form['email'] }
+    user_in_db = user.User.get_user_by_email(data)
+    # if user_in_db returns None
+    if not user_in_db:
+        flash("Invalid Email or Need to register", "danger")
+        return redirect('/')
+    if not bcrypt.check_password_hash(user_in_db.password, request.form['password']):
+        # If returns False, flash message
+        flash("Invalid password", "danger")
+        return redirect('/')
+    # If password match, we set the user_id into session
+    session['id'] = user_in_db.id
+    # Never render on a POST
+    return redirect('/dashboard')
 
 @app.route('/logout')
 def logout():

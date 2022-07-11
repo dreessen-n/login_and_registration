@@ -1,6 +1,6 @@
 # Import mysqlconnection config
 from flask_app.config.mysqlconnection import connectToMySQL
-from flask import flash
+from flask_app import flash
 import re # The regex module
 
 """
@@ -38,14 +38,26 @@ class User:
         # Returns list & we make an instance of the first index of that list
         return cls(connectToMySQL('login_and_registration').query_db(query, data)[0])
 
+    @classmethod
+    def get_user_by_email(cls, data):
+        """Get user by email"""
+        query = "SELECT * FROM users WHERE email = %(email)s;"
+        # Returns list & we make an instance of the first index of that list
+        result = connectToMySQL('login_and_registration').query_db(query, data)
+        # Check for a result
+        if len(result) < 1:
+            return False
+        return cls(result[0])
+
+
     @staticmethod
     def validate_registration(user):
             """Validate the add a user form"""
             is_valid = True # We assume this is true
-            if len(user['first_name']) < 3:
+            if len(user['first_name']) < 2:
                 flash("The first name must be at least 3 characters.", "danger")
                 is_valid = False
-            if len(user['last_name']) < 3:
+            if len(user['last_name']) < 2:
                 flash("The last name must be at least 3 characters.", "danger")
                 is_valid = False
             # Validate email

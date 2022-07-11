@@ -51,7 +51,10 @@ def dashboard():
     }
     # Pass the data dict to create_user method in class
     one_user = user.User.get_user_by_id(data)
-    print(one_user.first_name, one_user.last_name)
+    if one_user:
+        session['email'] = one_user.email
+        session['first_name'] = one_user.first_name
+        session['last_name'] = one_user.last_name
     return render_template('dashboard.html', one_user=one_user)
 
 @app.route('/logout')

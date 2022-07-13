@@ -55,10 +55,10 @@ class User:
             """Validate the add a user form"""
             is_valid = True # We assume this is true
             if len(user['first_name']) < 2:
-                flash("The first name must be at least 3 characters.", "danger")
+                flash("The first name must be at least 2 characters.", "danger")
                 is_valid = False
             if len(user['last_name']) < 2:
-                flash("The last name must be at least 3 characters.", "danger")
+                flash("The last name must be at least 2 characters.", "danger")
                 is_valid = False
             # Validate email
             if len(user['email']) < 3:
